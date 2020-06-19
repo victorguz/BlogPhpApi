@@ -11,43 +11,28 @@ if($type=="" || !$limit)
 {
   return http_response_code(400);
 }
+$sql = "SELECT * FROM posts WHERE categorias like '%{$type}%' ";
 
 $posts = [];
-if($limit==0 && $offset==0){
-$sql = "SELECT postid, userid, tipo,   
-  categorias, created, modified, estado, imgportada,
- (select presentacion from usuarios where usuarios.userid=post.userid) as username ,
- titulo, publicado FROM post WHERE tipo = '{$type}' order by publicado desc ";
-}else if($limit>0 && $offset==0){
-  $sql = "SELECT postid, userid, tipo,   
-  categorias, created, modified, estado, imgportada,
- (select presentacion from usuarios where usuarios.userid=post.userid) as username ,
- titulo, publicado FROM post WHERE tipo = '{$type}' order by publicado desc limit {$limit} ";
+
+
+if($limit>0 && $offset==0){
+  $sql .=  " limit {$limit} ";
 }else{
-  $sql = "SELECT postid, userid, tipo,   
-  categorias, created, modified, estado, imgportada,
- (select presentacion from usuarios where usuarios.userid=post.userid) as username ,
- titulo, publicado FROM post WHERE tipo = '{$type}' 
- order by publicado desc limit {$limit} offset {$offset} ";
+  $sql .= " offset {$offset} ";
 }
 if($result = mysqli_query($con,$sql))
 {
   $i = 0;
   while($row = mysqli_fetch_assoc($result))
   {
-    $posts[$i]['postid']    = $row['postid'];
+    $posts[$i]['id']    = $row['Id'];
     $posts[$i]['userid'] = $row['userid'];
-    $posts[$i]['username'] = $row['username'];
-    $posts[$i]['tipo'] = $row['tipo'];
     $posts[$i]['titulo'] = $row['titulo'];
-    $posts[$i]['descripcion'] = "";
-    $posts[$i]['contenido'] = "";
-    $posts[$i]['categorias'] = $row['categorias'];
-    $posts[$i]['created'] = $row['created'];
-    $posts[$i]['modified'] = $row['modified'];
-    $posts[$i]['publicado'] = $row['publicado'];
+    $posts[$i]['descripcion'] = $row['descripcion'];
     $posts[$i]['estado'] = $row['estado'];
-    $posts[$i]['imgportada'] = $row['imgportada'];
+    $posts[$i]['categorias'] = $row['categorias'];
+    $posts[$i]['portada'] = $row['portada'];
     $i++;
   }
 

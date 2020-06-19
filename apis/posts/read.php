@@ -15,10 +15,7 @@ return "Falta la clausula 'limit' en la sentencia.";
 }
 
 $posts = [];
-$sql = "SELECT postid, userid, tipo,   
-categorias, created, modified, estado, imgportada, publicado,
-(select presentacion from usuarios where usuarios.userid=p.userid) as username ,
-titulo, descripcion, contenido FROM post as p";
+$sql = "SELECT * FROM posts ";
 
 if(trim($orderby)!=""){
 
@@ -42,19 +39,13 @@ $i = 0;
 
 while($row = mysqli_fetch_assoc($result)){
   
-$posts[$i]['postid']    = $row['postid'];
+$posts[$i]['id']    = $row['Id'];
 $posts[$i]['userid'] = $row['userid'];
-$posts[$i]['username'] = $row['username'];
-$posts[$i]['tipo'] = $row['tipo'];
-$posts[$i]['categorias'] = $row['categorias'];
-$posts[$i]['created'] = $row['created'];
-$posts[$i]['modified'] = $row['modified'];
-$posts[$i]['publicado'] = $row['publicado'];
-$posts[$i]['estado'] = $row['estado'];
-$posts[$i]['imgportada'] = $row['imgportada'];
 $posts[$i]['titulo'] = $row['titulo'];
 $posts[$i]['descripcion'] = $row['descripcion'];
-$posts[$i]['contenido'] = $row['contenido'];
+$posts[$i]['estado'] = $row['estado'];
+$posts[$i]['categorias'] = $row['categorias'];
+$posts[$i]['portada'] = $row['portada'];
 $i++;
 
 }
