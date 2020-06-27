@@ -46,6 +46,7 @@ $posts[$i]['descripcion'] = $row['descripcion'];
 $posts[$i]['estado'] = $row['estado'];
 $posts[$i]['categorias'] = $row['categorias'];
 $posts[$i]['portada'] = $row['portada'];
+$posts[$i]['publicado'] = $row['publicado'];
 $i++;
 
 }
