@@ -12,7 +12,7 @@ if($id<0)
 }
 
 $usuarios = [];
-$sql = "SELECT * FROM users WHERE id = {$id}";
+$sql = "SELECT * FROM usuarios WHERE username = {$id}";
 
 if($result = mysqli_query($con,$sql))
 { 
