@@ -10,8 +10,7 @@ if(isset($postdata) && !empty($postdata))
   $request = json_decode($postdata);
 
   // Validate.
-  if (trim($request->nombres) =="" 
-  || trim($request->apellidos) =="" 
+  if (trim($request->nombre) =="" 
   || trim($request->username) =="" 
   || trim($request->password) =="" 
   || trim($request->imagen) =="") {
@@ -19,29 +18,33 @@ if(isset($postdata) && !empty($postdata))
   }
 
   // Sanitize.
-  $nombres = mysqli_real_escape_string($con, $request->nombres);
-  $apellidos = mysqli_real_escape_string($con, $request->apellidos);
+  $nombre = mysqli_real_escape_string($con, $request->nombre);
   $username = mysqli_real_escape_string($con, $request->username);
   $password = mysqli_real_escape_string($con, $request->password);
   $imagen = mysqli_real_escape_string($con, $request->imagen);
-  
 
   // Create.
-  $sql = "INSERT INTO users( nombres,apellidos,username,password,imagen,rol,estado)
-   VALUES ('{$nombres}','{$apellidos}','{$username}','{$password}','{$imagen}','usuario','normal')";
+  $sql = "INSERT INTO users( nombre,username,password,imagen,rol,estado)
+   VALUES ('{$nombre}','{$username}','{$password}','{$imagen}','usuario','normal')";
  
   if(mysqli_query($con,$sql))
   {
-    http_response_code(201);
     $policy = [
       'result' => 'Usuario creado con exito',
-      'id'    => mysqli_insert_id($con)
+      'id'    => mysqli_insert_id($con),
+      'response_code'=> 201
     ];
     echo json_encode($policy);
   }
   else
   {
-    http_response_code(422);
+    $policy = [
+      'result' => $con->error,
+      'id'    => 0,
+      'sql_result'=> $con->errno
+    ];
+    echo json_encode($policy);
+   /* echo $con->error;*/
   }
 }
 ?>

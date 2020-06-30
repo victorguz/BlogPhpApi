@@ -20,7 +20,7 @@ if($result = mysqli_query($con,$sql))
   if($row = mysqli_fetch_assoc($result))
   {
     $usuarios['id']    = $row['Id'];
-    $usuarios['nombres']    = $row['nombres'];
+    $usuarios['nombre']    = $row['nombre'];
     $usuarios['apellidos'] = $row['apellidos'];
     $usuarios['username'] = $row['username'];
     $usuarios['password'] = $row['password'];

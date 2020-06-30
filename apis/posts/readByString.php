@@ -3,7 +3,9 @@
 require '../database.php';
 
 // Extract, validate and sanitize the id.
-$search = $_GET['search'];
+$limit = ($_GET['limit'] !== null && (int)$_GET['limit'] > 0)? mysqli_real_escape_string($con, (int)$_GET['limit']) : false;
+$offset = ($_GET['offset'] !== null )? $_GET['offset'] : false;
+$search = ($_GET['search'] !== null && trim($_GET['search'])!=="")? mysqli_real_escape_string($con,$_GET['search']) : false;
 
 if($search=="")
 {
@@ -11,16 +13,20 @@ if($search=="")
 }
 
 $posts = [];
-/*$sql = "SELECT `postid`, `userid`, `tipo`, `titulo`, `descripcion`,
- `contenido`, `categorias`, `created`, `modified`, `estado` 
- FROM `post` WHERE `titulo` LIKE `{$search}` 
- or `descripcion` LIKE `{$search}`
- or `contenido` LIKE `{$search}` 
- or `categorias` LIKE `{$search}`
- ORDER BY `titulo`, `descripcion`, `contenido`, `categorias`";
-*/
 $sql = "SELECT * FROM posts WHERE titulo LIKE '%{$search}%' or contenido LIKE '%{$search}%' or descripcion LIKE '%{$search}%' 
  ORDER BY titulo desc, contenido desc, descripcion desc";
+
+
+if($offset==0){
+
+  $sql.=" limit {$limit} ";
+  
+  }else if($offset!=0){
+  
+  $sql.=" limit {$limit} offset {$offset} ";
+  
+}
+  
 
 if($result = mysqli_query($con,$sql))
 {
@@ -30,10 +36,10 @@ if($result = mysqli_query($con,$sql))
     $posts[$i]['id']    = $row['Id'];
     $posts[$i]['userid'] = $row['userid'];
     $posts[$i]['titulo'] = $row['titulo'];
-    $posts[$i]['descripcion'] = $row['descripcion'];
     $posts[$i]['estado'] = $row['estado'];
     $posts[$i]['categorias'] = $row['categorias'];
     $posts[$i]['portada'] = $row['portada'];
+    $posts[$i]['publicado'] = $row['publicado'];
     $i++;
   }
 

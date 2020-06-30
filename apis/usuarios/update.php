@@ -11,7 +11,7 @@ if(isset($postdata) && !empty($postdata))
 
   // Validate.
   if ($request->userid > 0 
-  || trim($request->nombres) =="" 
+  || trim($request->nombre) =="" 
   || trim($request->apellidos) =="" 
   || trim($request->username) =="" 
   || trim($request->password) =="" 
@@ -21,7 +21,7 @@ if(isset($postdata) && !empty($postdata))
 
   // Sanitize.
   $userid = mysqli_real_escape_string($con, $request->userid);
-  $nombres = mysqli_real_escape_string($con, $request->nombres);
+  $nombre = mysqli_real_escape_string($con, $request->nombre);
   $apellidos = mysqli_real_escape_string($con, $request->apellidos);
   $username = mysqli_real_escape_string($con, $request->username);
   $password = mysqli_real_escape_string($con, $request->password);
@@ -29,7 +29,7 @@ if(isset($postdata) && !empty($postdata))
 
   // Update.
   $sql = "UPDATE `usuarios` 
-  SET `nombres`='$nombres',
+  SET `nombre`='$nombre',
   `apellidos`='$apellidos' ,
   `username`='$username' ,
   `password`='$password' ,

@@ -13,8 +13,7 @@ if($result = mysqli_query($con,$sql))
   while($row = mysqli_fetch_assoc($result))
   {
     $usuarios[$i]['id']    = $row['Id'];
-    $usuarios[$i]['nombres']    = $row['nombres'];
-    $usuarios[$i]['apellidos'] = $row['apellidos'];
+    $usuarios[$i]['nombre']    = $row['nombre'];
     $usuarios[$i]['username'] = $row['username'];
     $usuarios[$i]['password'] = $row['password'];
     $usuarios[$i]['estado'] = $row['estado'];

@@ -8,12 +8,6 @@ $limit = ($_GET['limit'] !== null && (int)$_GET['limit'] > 0)? mysqli_real_escap
 $offset = ($_GET['offset'] !== null )? $_GET['offset'] : false;
 $orderby = ($_GET['orderby'] !== null && trim($_GET['orderby'])!=="")? mysqli_real_escape_string($con,$_GET['orderby']) : false;
 
-if(!$limit){
-
-return "Falta la clausula 'limit' en la sentencia.";
-
-}
-
 $posts = [];
 $sql = "SELECT * FROM posts ";
 
@@ -42,7 +36,6 @@ while($row = mysqli_fetch_assoc($result)){
 $posts[$i]['id']    = $row['Id'];
 $posts[$i]['userid'] = $row['userid'];
 $posts[$i]['titulo'] = $row['titulo'];
-$posts[$i]['descripcion'] = $row['descripcion'];
 $posts[$i]['estado'] = $row['estado'];
 $posts[$i]['categorias'] = $row['categorias'];
 $posts[$i]['portada'] = $row['portada'];
