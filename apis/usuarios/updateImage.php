@@ -10,33 +10,28 @@ if(isset($postdata) && !empty($postdata))
   $request = json_decode($postdata);
 
  // Validate.
- if (trim($request->nombre) =="" 
- || trim($request->username) =="" 
- || trim($request->password) =="" 
- || trim($request->imagen) =="") {
+ if (trim($request->imagen) == ""
+ || trim($request->id) == ""
+ || $request->id >0 ) {
    
-  $policy = [
-    'result' => 'Faltan algunos parametros',
-    'id'    => 0,
-    'sql_result'=> 'Nada'
-  ];
-  echo json_encode($policy);
+    $policy = [
+      'result' => 'Faltan algunos parametros',
+      'id'    => 0,
+      'sql_result'=> 'Nada'
+    ];
+    
+    echo json_encode($policy);
 
  }
 
   // Sanitize.
-  $nombre = mysqli_real_escape_string($con, $request->nombre);
-  $username = mysqli_real_escape_string($con, $request->username);
-  $password = mysqli_real_escape_string($con, $request->password);
+  $id = mysqli_real_escape_string($con, $request->id);
   $imagen = mysqli_real_escape_string($con, $request->imagen);
 
   // Update.
   $sql = "UPDATE `users` 
-  SET `nombre`='$nombre',
-  `username`='$username' ,
-  `password`='$password' ,
-  `created`='$created'
-  WHERE `userid` = '{$userid}' LIMIT 1";
+  SET `imagen`='$imagen' 
+  WHERE `id` = {$id} LIMIT 1";
 
 if(mysqli_query($con,$sql))
 {
