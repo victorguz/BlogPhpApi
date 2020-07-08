@@ -10,8 +10,7 @@ if(isset($postdata) && !empty($postdata))
   $request = json_decode($postdata);
 
   // Validate.
-  if (trim($request->username) =="" 
-  || trim($request->password) =="") {
+  if (trim($request->username) =="") {
 
     $policy = [
       'result' => 'Faltan algunos parametros',
@@ -23,16 +22,13 @@ if(isset($postdata) && !empty($postdata))
 
   // Sanitize.
   $username = mysqli_real_escape_string($con, $request->username);
-  $password = mysqli_real_escape_string($con, $request->password);
 
   // Create.
-  $sql = "select id from users where username = '{$username}' and password = '{$password}'";
+  $sql = "select id from users where username = '{$username}' and password = ''";
  
   if($result = mysqli_query($con,$sql))
   {
 
-
-    
   if($row = mysqli_fetch_assoc($result))
   {
       $id=$row['id'];
@@ -47,7 +43,7 @@ if(isset($postdata) && !empty($postdata))
         $policy = [
           'result' => 'Exito',
           'id'    => $id,
-          'sql_result'=> '---'
+          'sql_result'=> 'No hay registros relacionados con los datos'
         ];
         echo json_encode($policy);
       }
