@@ -9,7 +9,12 @@ $search = ($_GET['search'] !== null && trim($_GET['search'])!=="")? mysqli_real_
 
 if($search=="")
 {
-  return http_response_code(400);
+  $policy = [
+    'id'    => 0,
+    'result' => "Nada que buscar",
+    'http_response_code'=> 400
+  ];
+  echo json_encode($policy);
 }
 
 $posts = [];
@@ -47,7 +52,12 @@ if($result = mysqli_query($con,$sql))
 }
 else
 {
-  //http_response_code(404);
-  echo $con->error;
+  $policy = [
+    'id'    => 0,
+    'result' => $con->error,
+    'sql_response_code'=> $con->errno,
+    'http_response_code'=> 404
+  ];
+  echo json_encode($policy);
 }
 ?>

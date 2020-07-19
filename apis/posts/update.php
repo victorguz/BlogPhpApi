@@ -5,48 +5,57 @@ require '../database.php';
 $postdata = file_get_contents("php://input");
 
 if(isset($postdata) && !empty($postdata))
-{
+{ 
   // Extract the data.
   $request = json_decode($postdata);
 
-  // Validate.
-  if ((int)$request->id < 1 || trim($request->pdocumento) == '' 
-  || trim($request->pnombres) == '' 
-  || trim($request->papellidos) == '' 
-  || trim($request->ptelefono) == '' 
-  || trim($request->pdireccion) == '' 
-  || trim($request->pcontrasena) == '') {
-    return http_response_code(400);
-  }
+ // Validate.
+ if (trim($request->nombre) =="" 
+ || trim($request->username) =="" 
+ || trim($request->password) =="" 
+ || trim($request->imagen) =="") {
+   
+  $policy = [
+    'result' => 'Faltan algunos parametros',
+    'id'    => 0,
+    'sql_result'=> 'Nada'
+  ];
+  echo json_encode($policy);
+
+ }
 
   // Sanitize.
-  $id = mysqli_real_escape_string($con, trim($request->id));
-  $pdocumento = mysqli_real_escape_string($con, trim($request->pdocumento));
-  $pnombres = mysqli_real_escape_string($con, $request->pnombres);
-  $papellidos = mysqli_real_escape_string($con, $request->papellidos);
-  $ptelefono = mysqli_real_escape_string($con, trim($request->ptelefono));
-  $pemail = mysqli_real_escape_string($con, $request->pemail);
-  $pdireccion = mysqli_real_escape_string($con, $request->pdireccion);
-  $pcontrasena = mysqli_real_escape_string($con, $request->pcontrasena);
+  $nombre = mysqli_real_escape_string($con, $request->nombre);
+  $username = mysqli_real_escape_string($con, $request->username);
+  $password = mysqli_real_escape_string($con, $request->password);
+  $imagen = mysqli_real_escape_string($con, $request->imagen);
 
   // Update.
-  $sql = "UPDATE `propietarios` 
-  SET `pdocumento`='$pdocumento',
-  `pnombres`='$pnombres' ,
-  `papellidos`='$papellidos' ,
-  `ptelefono`='$ptelefono' ,
-  `pemail`='$pemail' ,
-  `pdireccion`='$pdireccion' ,
-  `pcontrasena`='$pcontrasena' 
-  WHERE `id` = '{$id}' LIMIT 1";
+  $sql = "UPDATE `users` 
+  SET `nombre`='$nombre',
+  `username`='$username' ,
+  `password`='$password' ,
+  `created`='$created'
+  WHERE `userid` = '{$userid}' LIMIT 1";
 
-  if(mysqli_query($con, $sql))
-  {
-    http_response_code(204);
-  }
-  else
-  {
-    return http_response_code(422);
-  }  
+if(mysqli_query($con,$sql))
+{
+  $policy = [
+    'result' => 'Exito',
+    'id'    => $id,
+    'response_code'=> 201
+  ];
+  echo json_encode($policy);
+}
+else
+{
+  $policy = [
+    'result' => $con->error,
+    'id'    => $id,
+    'sql_result'=> $con->errno
+  ];
+  echo json_encode($policy);
+ /* echo $con->error;*/
+}
 }
 ?>

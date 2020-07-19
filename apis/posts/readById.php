@@ -26,6 +26,7 @@ if($result = mysqli_query($con,$sql))
     $posts['estado'] = $row['estado'];
     $posts['categorias'] = $row['categorias'];
     $posts['portada'] = $row['portada'];
+    $posts['publicado'] = $row['publicado'];
   }
 
   echo json_encode($posts);

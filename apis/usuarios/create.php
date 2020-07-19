@@ -15,9 +15,8 @@ if(isset($postdata) && !empty($postdata))
   || trim($request->password) =="") {
 
     $policy = [
-      'result' => 'Faltan algunos parametros',
-      'id'    => 0,
-      'sql_result'=> 'Nada'
+      "id"    => 0,
+      "result" => "Faltan algunos parametros",
     ];
     return json_encode($policy);
   }
@@ -34,21 +33,21 @@ if(isset($postdata) && !empty($postdata))
   if(mysqli_query($con,$sql))
   {
     $policy = [
-      'result' => 'Exito',
       'id'    => mysqli_insert_id($con),
-      'response_code'=> 201
+      'result' => 'exito',
+      'http_response_code'=> 201
     ];
     echo json_encode($policy);
   }
   else
   {
     $policy = [
-      'result' => $con->error,
       'id'    => 0,
-      'sql_result'=> $con->errno
+      'result' => $con->error,
+      'sql_response_code'=> $con->errno,
+      'http_response_code'=> 404
     ];
     echo json_encode($policy);
-   /* echo $con->error;*/
   }
 }
 ?>

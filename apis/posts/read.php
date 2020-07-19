@@ -5,26 +5,30 @@
 require '../database.php';
 // Extract, validate and sanitize the id.
 $limit = ($_GET['limit'] !== null && (int)$_GET['limit'] > 0)? mysqli_real_escape_string($con, (int)$_GET['limit']) : false;
-$offset = ($_GET['offset'] !== null )? $_GET['offset'] : false;
+$offset = ($_GET['offset'] !== null && (int)$_GET['offset'] > 0)? mysqli_real_escape_string($con, (int)$_GET['offset']) : false;
 $orderby = ($_GET['orderby'] !== null && trim($_GET['orderby'])!=="")? mysqli_real_escape_string($con,$_GET['orderby']) : false;
 
 $posts = [];
 $sql = "SELECT * FROM posts ";
 
-if(trim($orderby)!=""){
+if($orderby!=false){
 
   $sql.=" order by {$orderby} ";
 
 }
 
-if($offset==0){
+if($offset==0 && $limit==0){
 
-$sql.=" limit {$limit} ";
+  $sql.=" limit 100 ";
+  
+}else if($offset==0 && $limit!=0){
 
-}else if($offset!=0){
+  $sql.=" limit {$limit} ";
 
-$sql.=" limit {$limit} offset {$offset} ";
-
+}else if($offset!=0 && $limit!=0){
+  
+  $sql.=" limit {$limit} offset {$offset} ";
+  
 }
 
 if($result = mysqli_query($con,$sql)){
@@ -48,7 +52,13 @@ echo json_encode($posts);
 
 }else{
 
-echo $con->error;
+  $policy = [
+    'id'    => 0,
+    'result' => $con->error,
+    'sql_response_code'=> $con->errno,
+    'http_response_code'=> 404
+  ];
+  echo json_encode($policy);
 
 }
 ?>
